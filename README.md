@@ -40,7 +40,7 @@ C:\Users\Ryland\Music\Trance\Factor B feat. Cat Martin Crashing Over (Extended M
 #### Example
 
 1. Open PowerShell. See the [Installation](#Installation) section for details.
-1. Drag and drop `Set-Mp3Tags.ps1` into the PowerShell window.
+1. Drag and drop `Set-Mp3Tags.ps1` into the PowerShell window. Press Enter.
 2. Follow prompt to select the folder it will process.
 
 ```text
