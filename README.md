@@ -1,6 +1,6 @@
 # PSTagLib
 
-A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp)
+A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp).
 
 * [Installation](#installation)
 * [Use](#Use)
@@ -11,7 +11,7 @@ A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](ht
 
 1. Install PowerShell
     * If you have a Windows computer, launch it by pressing the Windows key and typing PowerShell. Click on **Windows PowerShell** (not ISE).
-    * If you have a MacOS computer, install [PowerShell](https://github.com/PowerShell/PowerShell#get-powershell). Lanuch the **Terminal** application by pressing `Command` + `Space` and typing Terminal.
+    * If you have a MacOS computer, install [PowerShell Core](https://github.com/PowerShell/PowerShell#get-powershell). Lanuch PowerShell by pressing `Command` + `Space` and typing PowerShell.
         * Once in the Terminal session, type `pwsh` to launch PowerShell.
 2. Download this repo to your local machine by clicking the Green button and choosing **Download ZIP**.
 3. Extract `PSTagLib.zip` to a folder.
