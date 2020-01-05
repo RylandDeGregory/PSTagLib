@@ -54,15 +54,6 @@ function Set-Dir {
         $Genre
     )
 
-    # Ensure that the filesystem path supplied is valid
-    $validDir = Test-Path -Path "$Directory"
-
-    if ($validDir) {
-        $folder = Get-ChildItem -Path $Directory
-    } else {
-        Write-Error "Invalid folder path. Try again."
-    }
-
     Write-Output "----------"
 
     # Process all .mp3 files in the directory
@@ -109,10 +100,65 @@ function Set-Dir {
     }
 }
 
+Function Get-Dir {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [switch]
+        $Gui
+    )
+    if ($Gui) {
+        Write-Host "What is the path to the folder you want to process?"
+        Start-Sleep -Milliseconds 500
+        [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
+        $OpenFileDialog = New-Object System.Windows.Forms.FolderBrowserDialog
+        $OpenFileDialog.RootFolder = 'MyComputer'
+        $OpenFileDialog.ShowDialog() | Out-Null
+
+        $directory = $OpenFileDialog.SelectedPath
+    } else {
+        $directory = Read-Host "What is the path to the folder you want to process?"
+    }
+
+    # Ensure that the filesystem path supplied is valid
+    try {
+        $validDir = Test-Path -Path "$directory"
+    } catch {}
+
+    if ($validDir) {
+        return $directory
+    } else {
+        Write-Host -ForegroundColor Red "Invalid folder path. Try again."
+        return $false
+    }
+}
+
 # If a directory or genre wasn't specified during execution, prompt user to supply one.
 if (!$Directory) {
-    $directory = Read-Host "What is the path to the folder you want to process?"
+    if ($PSVersionTable.PSVersion.Major -lt 6) {
+        $gui = Read-Host -Prompt "Would you like to select a folder using the browse window? Enter 'Y' or 'N'"
+        if ($gui -match '^[yY]') {
+            $directory = Get-Dir -Gui
+        } else {
+            $directory = Get-Dir
+        }
+        while ($directory -eq $false) {
+            if ($gui -match '^[yY]') {
+                $directory = Get-Dir -Gui
+            } else {
+                $directory = Get-Dir
+            }
+        }
+    } else {
+        $directory = Get-Dir
+        while ($directory -eq $false) {
+            $directory = Get-Dir
+        }
+    }
+
+    $folder = Get-ChildItem -Path $Directory
 }
+
 if (!$Genre) {
     $userGenre = Read-Host "Would you like to set the genre based on folder name? Enter 'Y' or 'N'"
 }
