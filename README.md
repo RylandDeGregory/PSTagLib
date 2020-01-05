@@ -1,6 +1,6 @@
 # PSTagLib
 
-A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp)
+A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp).
 
 * [Installation](#installation)
 * [Use](#Use)
@@ -11,8 +11,7 @@ A PowerShell script for manipulating metadata in MP3 files with [TagLibSharp](ht
 
 1. Install PowerShell
     * If you have a Windows computer, launch it by pressing the Windows key and typing PowerShell. Click on **Windows PowerShell** (not ISE).
-    * If you have a MacOS computer, install [PowerShell](https://github.com/PowerShell/PowerShell#get-powershell). Lanuch the **Terminal** application by pressing `Command` + `Space` and typing Terminal.
-        * Once in the Terminal session, type `pwsh` to launch PowerShell.
+    * If you have a MacOS computer, install [PowerShell Core](https://github.com/PowerShell/PowerShell#get-powershell). Lanuch PowerShell by pressing `Command` + `Space` and typing PowerShell.
 2. Download this repo to your local machine by clicking the Green button and choosing **Download ZIP**.
 3. Extract `PSTagLib.zip` to a folder.
     * Ensure that both `Set-Mp3Tags.ps1` and `taglib-sharp.dll` are in the same folder.
@@ -40,7 +39,8 @@ C:\Users\Ryland\Music\Trance\Factor B feat. Cat Martin Crashing Over (Extended M
 
 #### Example
 
-1. Double-Click `Set-Mp3Tags.ps1`
+1. Open PowerShell. See the [Installation](#Installation) section for details.
+1. Drag and drop `Set-Mp3Tags.ps1` into the PowerShell window. Press Enter.
 2. Follow prompt to select the folder it will process.
 
 ```text
