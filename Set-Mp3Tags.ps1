@@ -98,7 +98,7 @@ function Set-Dir {
                     Write-Output "Title: $title"
                     $tag.Tag.Title = $title
 
-                    if ($ProcesGenre) {
+                    if ($ProcessGenre) {
                         if (!$Genre) {
                             # If a genre wasn't defined by the user, use the name of the folder
                             $fileGenre = $file.DirectoryName | Split-Path -Leaf
