@@ -13,160 +13,21 @@
 #region Init
 [CmdletBinding()]
 param (
-    [Parameter]
-    [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
-    [Parameter]
-    [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
-    [Parameter]
-    [string] $Genre # The value that will be set for the genre tag (overrides directory name)
+    # Filesystem path to the directory containing MP3 files for processing
+    [Parameter(Mandatory = $true)]
+    [string] $Directory,
+    # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
+    [Parameter(Mandatory = $false)]
+    [switch] $ProcessGenre,
+    # The value that will be set for the genre tag (overrides directory name)
+    [Parameter(Mandatory = $false)]
+    [string] $Genre
 )
-
-# Import the TagLibSharp library
-if ($(Test-Path -Path $PSScriptRoot\taglib-sharp.dll)) {
-    try {
-        Add-Type -Path $PSScriptRoot\taglib-sharp.dll
-    } catch {
-        throw "Error importing TagLibSharp library: $($Error[0])"
-    }
-} else {
-    throw 'Error importing TagLibSharp library. Ensure that taglib-sharp.dll is in the same directory as this script.'
-}
 
 # Set delimiter character(s)
 # default: ' - ' (space hyphen space)
 $Delimiter = ' - '
 #endregion Init
-
-#region Functions
-function Get-MP3Directory {
-    <#
-        .SYNOPSIS
-            Determine if a provided filesystem directory is valid. Optionally allow users to launch a graphical filesystem browser to select a directory.
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $false)]
-        [switch] $Gui # Compatible with Windows PowerShell ONLY. Whether or not to use a Windows forms graphical interface to browse for a directory.
-    )
-
-    begin {
-        if ($Gui) {
-            Write-Host -ForegroundColor Blue "What is the path to the folder you want to process?"
-            Start-Sleep -Milliseconds 500
-            [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
-            $OpenFileDialog = New-Object System.Windows.Forms.FolderBrowserDialog
-            $OpenFileDialog.RootFolder = 'MyComputer'
-            $OpenFileDialog.ShowDialog() | Out-Null
-
-            # Save selected filesystem path to variable
-            $Directory = $OpenFileDialog.SelectedPath
-        } else {
-            $Directory = Read-Host "What is the path to the folder you want to process?"
-        }
-    }
-
-    process {
-        # Ensure that the filesystem path supplied is valid
-        try {
-            $ValidDirectory = Test-Path -Path "$Directory"
-        } catch {
-            throw "Error checking filesystem path supplied $($Error[0])"
-        }
-    }
-
-    end {
-        if ($ValidDirectory) {
-            $Directory
-        } else {
-            Write-Host -ForegroundColor Red 'Invalid folder path. Please validate and try again.'
-            $false
-        }
-    }
-} #endfunction Get-MP3Directory
-function Set-MP3MetadataTags {
-<#
-    .SYNOPSIS
-       Add MP3 metadata tags to files based on file naming convention 'Artist${delimiter}Title (Mix)'. Optionally set MP3 genre tag.
-#>
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
-        [Parameter]
-        [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
-        [Parameter]
-        [string] $Genre # The value that will be set for the genre tag (overrides directory name)
-    )
-
-    begin {
-        Write-Output '----------'
-
-        if ($ProcessGenre -and $Genre) {
-            Write-Output "Genre for this directory is [$Genre]."
-        } elseif ($ProcessGenre -and !$Genre) {
-            Write-Output 'Genre was not specified, using directory name.'
-        }
-
-        Write-Output "Processing $Directory with Genre $Genre"
-    }
-
-    process {
-        # Process all .mp3 files in the directory
-        $Files = Get-ChildItem $Directory
-        foreach ($File in $Files) {
-            if ($File.Extension -eq ".mp3") {
-                # Split on pre-defined delimiter
-                $Items = $File.BaseName -Split $Delimiter
-                $File.FullName
-
-                # Check if filename is properly formatted
-                if ($Items.Count -eq 2) {
-                    $Artist = $Items[0].Trim()
-                    $Title  = $Items[1].Trim()
-                } else {
-                    Write-Host -ForegroundColor Red '***Filename improperly formatted. This file will be skipped.***'
-                    Write-Output '----------'
-                    continue
-                }
-
-                try {
-                    # Invoke TagLibSharp library to set MP3 metadata tags
-                    $Tag = [TagLib.File]::Create($File.FullName)
-
-                    Write-Output "Artist: $Artist"
-                    $Tag.Tag.AlbumArtists = $Artist
-                    $Tag.Tag.Performers   = $Artist
-
-                    Write-Output "Title: $Title"
-                    $Tag.Tag.Title = $Title
-
-                    if ($ProcessGenre) {
-                        if (!$Genre) {
-                            # If a genre wasn't defined by the user, use the name of the directory
-                            $FileGenre = $File.DirectoryName | Split-Path -Leaf
-                            Write-Output "Genre: $FileGenre"
-                            $Tag.Tag.Genres = $FileGenre
-                        } else {
-                            Write-Output "Genre: $Genre"
-                            $Tag.Tag.Genres = $Genre
-                        }
-                    }
-
-                    # Commit the MP3 metadata tag changes to the file
-                    $Tag.Save()
-                } catch {
-                    Write-Host -ForegroundColor DarkYellow "Error setting MP3 tags for file [$($File.FullName)]"
-                    continue
-                }
-                Write-Output '----------'
-            }
-        }
-    }
-
-    end {
-        Write-Verbose 'Completed'
-    }
-} #endfunction Set-MP3MetadataTags
-#endregion Functions
 
 #region GetInteractiveParameters
 if (!$Directory) {
