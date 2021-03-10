@@ -19,14 +19,13 @@ function Get-Artist {
     [CmdletBinding()]
     [OutputType([System.Object])]
     param (
-        # Fully-qualified filesystem path to the .mp3 file(s) being updated
-        # Accepts single path or string array of paths
+        # Array of fully-qualified filesystem path(s) to the .mp3 file(s) being queried
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 1)]
         [string[]] $File
     )
 
     begin {
-        Write-Verbose "[INFO] Entering Get-Artist"
+        Write-Verbose '[INFO] Entering Get-Artist'
     }
 
     process {
@@ -49,6 +48,6 @@ function Get-Artist {
     }
 
     end {
-        Write-Verbose "[INFO] Exiting Get-Artist"
+        Write-Verbose '[INFO] Exiting Get-Artist'
     }
 }

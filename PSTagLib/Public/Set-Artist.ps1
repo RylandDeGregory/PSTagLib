@@ -9,10 +9,6 @@ function Set-Artist {
             Fully-qualified filesystem path or array of paths.
         .OUTPUTS
             MP3 ID3 Artist tags are updated on MP3 file(s).
-        .PARAMETER Artist
-            Name of the artist to be set in the .mp3 file(s) ID3 tags
-        .PARAMETER File
-            Fully-qualified filesystem path to the .mp3 file(s) being updated
         .EXAMPLE
             Set-Artist -Artist 'Above & Beyond' -File '~/Music/Trance/Above & Beyond/Indonesia.mp3'
         .EXAMPLE
@@ -22,16 +18,17 @@ function Set-Artist {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true, Position = 0)]
+        # Name of the artist to be set in the .mp3 file(s) ID3 tags
+        [Parameter(Mandatory, Position = 0)]
         [string] $Artist,
 
-        [Parameter(Mandatory = $true,
-        ValueFromPipeline = $true, Position = 1)]
+        # Array of fully-qualified filesystem path(s) to the .mp3 file(s) being updated
+        [Parameter(Mandatory, ValueFromPipeline, Position = 1)]
         [string[]] $File
     )
 
     begin {
-        Write-Verbose "[INFO] Entering Set-Artist"
+        Write-Verbose '[INFO] Entering Set-Artist'
     }
 
     process {
@@ -54,6 +51,6 @@ function Set-Artist {
     }
 
     end {
-        Write-Verbose "[INFO] Exiting Set-Artist"
+        Write-Verbose '[INFO] Exiting Set-Artist'
     }
 }

@@ -14,13 +14,13 @@
 [CmdletBinding()]
 param (
     # Filesystem path to the directory containing MP3 files for processing
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory)]
     [string] $Directory,
     # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
-    [Parameter(Mandatory = $false)]
+    [Parameter()]
     [switch] $ProcessGenre,
     # The value that will be set for the genre tag (overrides directory name)
-    [Parameter(Mandatory = $false)]
+    [Parameter()]
     [string] $Genre
 )
 
