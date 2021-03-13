@@ -14,7 +14,7 @@
     .EXAMPLE
         ./Invoke-MP3Download.ps1 -InputFile '~/Desktop/tracks.csv' -OutputPath '~/Music/'
     .EXAMPLE
-        .\Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1'
+        .\Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
     .EXAMPLE
         ./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1', 'https://soundcloud.com/ryland-degregory/sample2'
 #>
