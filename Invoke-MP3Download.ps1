@@ -33,11 +33,7 @@ param (
     # URL or array of URLs to download
     [Parameter()]
     [ValidatePattern('^https?://')]
-    [string[]] $InputURL,
-
-    # Optionally install youtube-dl on MacOS / Linux
-    [Parameter()]
-    [switch] $Install
+    [string[]] $InputURL
 )
 
 $FileFormat = 'bestaudio'
@@ -56,20 +52,6 @@ $OutputFormat = "$OutputPath%(title)s.%(ext)s"
 
 if ($InputFile -and $InputURL) {
     throw '[ERROR] You cannot specify both -InputFile and -InputURL parameters.'
-}
-
-if ($Install -and -not $IsWindows) {
-    try {
-        # Install youtube-dl if install parameter is specified
-        if (-not $(Test-Path -Path '/usr/local/bin/youtube-dl')) {
-            Invoke-WebRequest -Uri 'https://yt-dl.org/downloads/latest/youtube-dl' -OutFile '/usr/local/bin/youtube-dl'
-            Invoke-Expression 'sudo chmod a+rx /usr/local/bin/youtube-dl'
-        } else {
-            Write-Warning '[WARN] youtube-dl is already installed'
-        }
-    } catch {
-        throw "[ERROR] Error downloading and installing youtube-dl: $_"
-    }
 }
 
 try {
