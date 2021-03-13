@@ -10,11 +10,11 @@
     .OUTPUTS
         MP3 files downloaded to the local machine
     .EXAMPLE
-        .\Invoke-MP3Download.ps1 -InputFile 'C:\Users\user1\Desktop\tracks.txt'
+        ./Invoke-MP3Download.ps1 -InputFile 'C:\Users\user1\Desktop\tracks.txt'
     .EXAMPLE
         ./Invoke-MP3Download.ps1 -InputFile '/Users/user1/Desktop/tracks.csv' -OutputPath '/Users/user1/Music/'
     .EXAMPLE
-        .\Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
+        ./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
     .EXAMPLE
         ./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1', 'https://soundcloud.com/ryland-degregory/sample2'
 #>

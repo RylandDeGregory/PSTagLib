@@ -20,18 +20,19 @@ A collection of PowerShell utilities for manipulating metadata in MP3 files with
 
 ### Download youtube-dl
 
-* `Invoke-MP3Download.ps1` can be utilized to programmatically download MP3 files using the [youtube-dl](https://ytdl-org.github.io/youtube-dl/index.html) command-line tool. If you do not have youtube-dl installed, follow the steps below, taken from the [download page](https://ytdl-org.github.io/youtube-dl/download.html) on their website.
+* `Invoke-MP3Download.ps1` can be utilized to programmatically download MP3 files using the [youtube-dl](https://ytdl-org.github.io/youtube-dl/index.html) command-line tool. If you do not have youtube-dl installed, follow the steps below taken from the youtube-dl [download page](https://ytdl-org.github.io/youtube-dl/download.html).
 
 #### Windows
 
-* Go to the `youtube-dl` download page -- linked above -- and click on the "Windows exe" link. When the file is downloaded, double-click to install.
+* Go to the `youtube-dl` download page -- linked above -- and click on the "Windows exe" link. Once the file is downloaded, double-click it to install.
 
 #### MacOS and Linux
 
+> You will be prompted for your computer's user password and press Enter. Don't worry if there aren't dots indicating that you are typing, your input is still being received.
+
 ```shell
 sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-
-sudo chmod a+rx /usr/local/bin/youtube-d
+sudo chmod a+rx /usr/local/bin/youtube-dl
 ```
 
 ### Download MP3 files using PowerShell and youtube-dl
@@ -43,19 +44,25 @@ sudo chmod a+rx /usr/local/bin/youtube-d
 #### Interactive download
 
 1. Drag and drop `Invoke-MP3Download.ps1` into the PowerShell window. Press Enter.
-1. At the script mode prompt, select the mode you want the script to run in by typing `1` or `2`. Press Enter, then do the following based on your choice:
-    1. Paste the link into the PowerShell window. Press Enter.
-    1. Drag and drop the `.txt` or `.csv` file you created above into the PowerShell window. Press Enter.
+1. At the first question, select the mode you want the script to run in by typing `1` or `2`. Press Enter, then do the following based on your choice:
+    * `1`: Paste the link into the PowerShell window. Press Enter.
+    * `2`: Drag and drop the `.txt` or `.csv` file you created above into the PowerShell window. Press Enter.
 1. The MP3 files corresponding to the link(s) provided will be downloaded to the Desktop, and a log of operations (including any errors, see [Troubleshooting](#troubleshooting)) will be written to the PowerShell window.
 
 > If you are satisfied with the results of your MP3 file download(s), proceed to the [Set MP3 tags](#Set-MP3-metadata-tags) section to set the metadata tags for the newly-downloaded MP3 files.
 
 #### Programmatic download
 
+PowerShell [Comment-based Help](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7.1) is provided for `Invoke-MP3Download.ps1`. To view, type the following into a PowerShell window and press Enter (*your path to the script may be different*):
+
+```PowerShell
+Get-Help -Full ./Invoke-MP3Download.ps1
+```
+
 * **Example 1:** Download a list of links from a `.txt` file on the Desktop and save to them to the current directory.
 
 ```powershell
-.\Invoke-MP3Download.ps1 -InputFile 'C:\Users\user1\Desktop\tracks.txt'
+./Invoke-MP3Download.ps1 -InputFile 'C:\Users\user1\Desktop\tracks.txt'
 ```
 
 * **Example 2:** Download a list of links from a `.csv` file and save them to the *Music* folder.
@@ -67,7 +74,7 @@ sudo chmod a+rx /usr/local/bin/youtube-d
 * **Example 3:** Download a single link and save it to the Desktop.
 
 ```powershell
-.\Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
+./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
 ```
 
 * **Example 4:** Download multiple links and save them to the current directory.
