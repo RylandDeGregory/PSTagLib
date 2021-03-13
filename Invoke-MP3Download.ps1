@@ -12,7 +12,7 @@
     .EXAMPLE
         .\Invoke-MP3Download.ps1 -InputFile 'C:\Users\user1\Desktop\tracks.txt'
     .EXAMPLE
-        ./Invoke-MP3Download.ps1 -InputFile '~/Desktop/tracks.csv' -OutputPath '~/Music/'
+        ./Invoke-MP3Download.ps1 -InputFile '/Users/user1/Desktop/tracks.csv' -OutputPath '/Users/user1/Music/'
     .EXAMPLE
         .\Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1' -OutputPath 'C:\Users\user1\Desktop\'
     .EXAMPLE
@@ -55,8 +55,39 @@ if ($InputFile -and $InputURL) {
     throw '[ERROR] You cannot specify both -InputFile and -InputURL parameters.'
 }
 
+if (-not $InputFile -and -not $InputURL) {
+    # Provide interactive user experience
+    $Selection = Read-Host "Would you like to provide [1] a link, or [2] a file containing a list of links (one per line)? Type 1 or 2 and press Enter.`n"
+
+    switch ($Selection) {
+        '1' {
+            $InputURL = Read-Host "Please enter the link to the MP3 file you want to download and press Enter.`n"
+            $InputURL = $InputURL.Trim()
+        }
+        '2' {
+            $InputFile = Read-Host "Please drag and drop the file of links into this window and press Enter.`n"
+            $InputFile = $InputFile.Trim()
+        }
+    }
+
+    Write-Host -ForegroundColor Green -Message "MP3 files will be downloaded to the Desktop."
+
+    if ($PSVersionTable.PSVersion.Major -ge 6) {
+        if ($IsWindows) {
+            $OutputPath = "$env:USERPROFILE\Desktop\"
+        } elseif ($IsMacOS) {
+            $OutputPath = "$env:HOME/Desktop/"
+        } else {
+            $OutputPath = $PSScriptRoot
+        }
+    } else {
+        OutputPath = "$env:USERPROFILE\Desktop\"
+    }
+
+}
+
 try {
-    # Display youtube-dl version
+    # Output youtube-dl version
     Write-Output '[INFO] youtube-dl version:'
     Invoke-Expression 'youtube-dl --version'
 } catch {
@@ -80,7 +111,7 @@ if ($InputURL) {
     }
 }
 
-Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputFormat`n"
+Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputPath`n"
 foreach ($Item in $TracksForDownload) {
     try {
         # Download the track using the pre-defined output format
