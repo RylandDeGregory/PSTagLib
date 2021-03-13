@@ -4,6 +4,7 @@
     .DESCRIPTION
         Download a list of files from a provided list of URLs.
         URLs can be provided as a parameter to the script, or as a .txt or .csv file.
+        If using a file, URLs must be provided one per line.
     .INPUTS
         URLs parsable by youtube-dl. See https://github.com/ytdl-org/youtube-dl/ for more information
     .OUTPUTS
@@ -20,12 +21,12 @@
 #region Init
 [CmdletBinding()]
 param (
-    # Fully-qualified filesystem path to the directory containing list of URLs
+    # Fully-qualified filesystem path to the file containing list of URLs to download
     [Parameter()]
     [ValidatePattern('.*\.txt|csv$')]
     [string] $InputFile,
 
-    # Fully-qualified filesystem path to the directory where MP3 files will be downloaded to
+    # Fully-qualified filesystem path to the directory where MP3 files will be downloaded
     # Defaults to the same directory as the script
     [Parameter()]
     [string] $OutputPath = $PSScriptRoot,
