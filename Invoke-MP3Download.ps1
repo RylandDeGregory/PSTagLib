@@ -55,6 +55,7 @@ if ($InputFile -and $InputURL) {
 }
 
 try {
+    # Display youtube-dl version
     Write-Output '[INFO] youtube-dl version:'
     Invoke-Expression 'youtube-dl --version'
 } catch {
@@ -62,6 +63,7 @@ try {
 }
 
 if ($InputFile) {
+    # The user provided a file
     if ($InputFile -like '*.txt') {
         $TracksForDownload = Get-Content -Path $InputFile
     } elseif ($InputFile -like '*.csv') {
@@ -70,6 +72,7 @@ if ($InputFile) {
 }
 
 if ($InputURL) {
+    # The user provided a string or array of strings
     $TracksForDownload = @()
     $InputURL | ForEach-Object {
         $TracksForDownload += $_
@@ -79,6 +82,7 @@ if ($InputURL) {
 Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputFormat`n"
 foreach ($Item in $TracksForDownload) {
     try {
+        # Download the track using the pre-defined output format
         Invoke-Expression "youtube-dl $Item -f $FileFormat -o '$OutputFormat'"
     } catch {
         throw "[ERROR] Error downloading [$Item] using youtube-dl: $_"
