@@ -18,6 +18,8 @@ A collection of PowerShell utilities for downloading and tagging MP3 files with 
 
 ## Download MP3 files
 
+The script `Invoke-MP3Download.ps1` will enable you to programmatically download MP3 files from certain websites. Downloading videos or audio from videos is currently unsupported unless you already have a working installation of `ffmpeg`.
+
 ### Download youtube-dl
 
 * `Invoke-MP3Download.ps1` can be utilized to programmatically download MP3 files using the [youtube-dl](https://ytdl-org.github.io/youtube-dl/index.html) command-line tool. If you do not have youtube-dl installed, follow the steps below taken from the youtube-dl [download page](https://ytdl-org.github.io/youtube-dl/download.html).
@@ -28,7 +30,7 @@ A collection of PowerShell utilities for downloading and tagging MP3 files with 
 
 #### MacOS and Linux
 
-> You will be prompted for your computer's user password and press Enter. Don't worry if there aren't dots indicating that you are typing, your input is still being received.
+> You will be prompted for your password. Type it in and press Enter. Don't worry if there aren't dots indicating that you are typing, your input is still being received.
 
 ```shell
 sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
