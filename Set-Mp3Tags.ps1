@@ -13,11 +13,11 @@
 #region Init
 [CmdletBinding()]
 param (
-    [Parameter]
+    [Parameter()]
     [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
-    [Parameter]
+    [Parameter()]
     [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
-    [Parameter]
+    [Parameter()]
     [string] $Genre # The value that will be set for the genre tag (overrides directory name)
 )
 
@@ -62,6 +62,7 @@ function Get-MP3Directory {
             $Directory = $OpenFileDialog.SelectedPath
         } else {
             $Directory = Read-Host "What is the path to the folder you want to process?"
+            Write-Host "You entered: '$Directory'"
         }
     }
 
@@ -76,10 +77,10 @@ function Get-MP3Directory {
 
     end {
         if ($ValidDirectory) {
-            $Directory
+            return $Directory
         } else {
             Write-Host -ForegroundColor Red 'Invalid folder path. Please validate and try again.'
-            $false
+            return $false
         }
     }
 } #endfunction Get-MP3Directory
@@ -91,9 +92,9 @@ function Set-MP3MetadataTags {
     param (
         [Parameter(Mandatory = $true)]
         [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
-        [Parameter]
+        [Parameter()]
         [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
-        [Parameter]
+        [Parameter()]
         [string] $Genre # The value that will be set for the genre tag (overrides directory name)
     )
 
@@ -192,15 +193,13 @@ if (!$Directory) {
             $Directory = Get-MP3Directory
         }
     }
-
-    $Directory = Get-ChildItem -Path $Directory
 }
 
-if (!$ProcessGenre) {
+if ($Directory -and !$ProcessGenre) {
     $UserProcessGenre = Read-Host 'Would you like to set the genre based on folder name? Enter Y or N'
 }
 
-if (!$ProcessGenre -and !$Genre -and ($UserProcessGenre -match '^[nN]')) {
+if ($Directory -and !$ProcessGenre -and !$Genre -and ($UserProcessGenre -match '^[nN]')) {
     $UserGenre = Read-Host 'Would you like to set the genre manually? Enter Y or N'
 }
 #endregion GetInteractiveParameters
