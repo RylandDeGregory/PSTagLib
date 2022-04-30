@@ -83,7 +83,6 @@ if (-not $InputFile -and -not $InputURL) {
     } else {
         OutputPath = "$env:USERPROFILE\Desktop\"
     }
-
 }
 
 try {
@@ -105,18 +104,20 @@ if ($InputFile) {
 
 if ($InputURL) {
     # The user provided a string or array of strings
-    $TracksForDownload = @()
-    $InputURL | ForEach-Object {
-        $TracksForDownload += $_
-    }
+    $TracksForDownload = $InputURL | ForEach-Object { $_ }
 }
 
 Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputPath`n"
 foreach ($Item in $TracksForDownload) {
-    try {
-        # Download the track using the pre-defined output format
-        Invoke-Expression "youtube-dl $Item -f $FileFormat -o '$OutputFormat'"
-    } catch {
-        throw "[ERROR] Error downloading [$Item] using youtube-dl: $_"
+    $Uri = $Item -as [System.URI]
+	if ($null -ne $Uri.AbsoluteURI -and $Uri.Scheme -match '[http|https]') {
+        try {
+            # Download the track using the pre-defined output format
+            Invoke-Expression "youtube-dl $Item -f $FileFormat -o '$OutputFormat'"
+        } catch {
+            throw "[ERROR] Error downloading [$Item] using youtube-dl: $_"
+        }
+    } else {
+        throw "[ERROR] Item provided for download is not a valid URL: [$Item]"
     }
 }

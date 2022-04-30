@@ -51,9 +51,9 @@ function Get-MP3Directory {
 
     begin {
         if ($Gui) {
-            Write-Host -ForegroundColor Blue "What is the path to the folder you want to process?"
+            Write-Host -ForegroundColor Blue 'What is the path to the folder you want to process?'
             Start-Sleep -Milliseconds 500
-            [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
+            [System.Reflection.Assembly]::LoadWithPartialName('System.windows.forms') | Out-Null
             $OpenFileDialog = New-Object System.Windows.Forms.FolderBrowserDialog
             $OpenFileDialog.RootFolder = 'MyComputer'
             $OpenFileDialog.ShowDialog() | Out-Null
@@ -61,7 +61,7 @@ function Get-MP3Directory {
             # Save selected filesystem path to variable
             $Directory = $OpenFileDialog.SelectedPath
         } else {
-            $Directory = Read-Host "What is the path to the folder you want to process?"
+            $Directory = Read-Host 'What is the path to the folder you want to process?'
             Write-Host "You entered: '$Directory'"
         }
     }
@@ -85,7 +85,7 @@ function Get-MP3Directory {
     }
 } #endfunction Get-MP3Directory
 function Set-MP3MetadataTags {
-<#
+    <#
     .SYNOPSIS
        Add MP3 metadata tags to files based on file naming convention 'Artist${delimiter}Title (Mix)'. Optionally set MP3 genre tag.
 #>
@@ -103,7 +103,7 @@ function Set-MP3MetadataTags {
 
         if ($ProcessGenre -and $Genre) {
             Write-Output "Genre for this directory is [$Genre]."
-        } elseif ($ProcessGenre -and !$Genre) {
+        } elseif ($ProcessGenre -and -not $Genre) {
             Write-Output 'Genre was not specified, using directory name.'
         }
 
@@ -114,7 +114,7 @@ function Set-MP3MetadataTags {
         # Process all .mp3 files in the directory
         $Files = Get-ChildItem $Directory
         foreach ($File in $Files) {
-            if ($File.Extension -eq ".mp3") {
+            if ($File.Extension -eq '.mp3') {
                 # Split on pre-defined delimiter
                 $Items = $File.BaseName -Split $Delimiter
                 $File.FullName
@@ -141,7 +141,7 @@ function Set-MP3MetadataTags {
                     $Tag.Tag.Title = $Title
 
                     if ($ProcessGenre) {
-                        if (!$Genre) {
+                        if (-not $Genre) {
                             # If a genre wasn't defined by the user, use the name of the directory
                             $FileGenre = $File.DirectoryName | Split-Path -Leaf
                             Write-Output "Genre: $FileGenre"
@@ -170,7 +170,7 @@ function Set-MP3MetadataTags {
 #endregion Functions
 
 #region GetInteractiveParameters
-if (!$Directory) {
+if (-not $Directory) {
     # If a directory or genre wasn't specified during execution, prompt user to supply one.
     if ($PSVersionTable.PSVersion.Major -lt 6) {
         $Gui = Read-Host -Prompt 'Would you like to select a folder using the browse window? Enter Y or N'
@@ -195,11 +195,11 @@ if (!$Directory) {
     }
 }
 
-if ($Directory -and !$ProcessGenre) {
+if ($Directory -and -not $ProcessGenre) {
     $UserProcessGenre = Read-Host 'Would you like to set the genre based on folder name? Enter Y or N'
 }
 
-if ($Directory -and !$ProcessGenre -and !$Genre -and ($UserProcessGenre -match '^[nN]')) {
+if ($Directory -and -not $ProcessGenre -and -not $Genre -and ($UserProcessGenre -match '^[nN]')) {
     $UserGenre = Read-Host 'Would you like to set the genre manually? Enter Y or N'
 }
 #endregion GetInteractiveParameters
