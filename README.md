@@ -12,9 +12,9 @@ A collection of PowerShell utilities for downloading and tagging MP3 files with 
 
 1. Install PowerShell
     * If you have a Windows computer, launch it by pressing the Windows key and typing PowerShell. Click on **Windows PowerShell** (not ISE).
-    * If you have a MacOS computer, install [PowerShell](https://github.com/PowerShell/PowerShell#get-powershell). Lanuch PowerShell by pressing `Command` + `Space` and typing PowerShell.
-2. Download this repo to your local machine by clicking the Green **Code** button and choosing **Download ZIP**.
-3. Extract `PSTagLib.zip` to a folder.
+    * If you have a MacOS computer, install [PowerShell](https://github.com/PowerShell/PowerShell#get-powershell). Launch PowerShell by pressing <kbd>Cmd</kbd> + <kbd>Space</kbd> and typing PowerShell.
+1. Download this repo to your local machine by clicking the Green **Code** button and choosing **Download ZIP**.
+1. Unzip `PSTagLib.zip` to any folder on your computer.
 
 ## Download MP3 files
 
@@ -26,15 +26,25 @@ The script `Invoke-MP3Download.ps1` will enable you to programmatically download
 
 #### Windows
 
-* Go to the `youtube-dl` download page -- linked above -- and click on the "Windows exe" link. Once the file is downloaded, double-click it to install.
+Open PowerShell as **Administrator** and copy the following code into the window. Press <kbd>Enter</kbd>.
+
+```PowerShell
+Invoke-RestMethod 'https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe' -OutFile "$env:USERPROFILE\Desktop\vcredist_x86.exe"
+Start-Process "$env:USERPROFILE\Desktop\vcredist_x86.exe" -ArgumentList '/Q' -Wait
+Remove-Item "$env:USERPROFILE\Desktop\vcredist_x86.exe" -Force -ErrorAction SilentlyContinue
+Invoke-WebRequest 'https://yt-dl.org/downloads/2021.12.17/youtube-dl.exe' -OutFile "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\youtube-dl.exe"
+$env:Path = [System.Environment]::GetEnvironmentVariable('PATH')
+```
 
 #### MacOS and Linux
 
+Open PowerShell and copy the following code into the window. Press <kbd>Enter</kbd>.
 > You will be prompted for your password. Type it in and press Enter. Don't worry if there aren't dots indicating that you are typing, your input is still being received.
 
-```shell
-sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
-sudo chmod a+rx /usr/local/bin/youtube-dl
+```PowerShell
+Invoke-RestMethod -Method Get -Uri 'https://yt-dl.org/downloads/latest/youtube-dl' -OutFile '/usr/local/bin/youtube-dl'
+sudo chmod a+rx '/usr/local/bin/youtube-dl'
+$env:Path = [System.Environment]::GetEnvironmentVariable('PATH')
 ```
 
 ### Download MP3 files using PowerShell and youtube-dl
@@ -181,10 +191,12 @@ Press Enter to exit:
 
 ### Script won't execute
 
+![WindowsTerminal_EVBHp0icto](https://user-images.githubusercontent.com/18073815/167960282-830a55cb-9d11-4b1a-99a3-f055050febc0.png)
+
 * Ensure that you can execute scripts on your machine. Enter an **Administrator** PowerShell session and paste the following command:
 
 ```powershell
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```
 
 * If you change this setting, you **MUST** change it back when you are done using this tool.
@@ -194,6 +206,8 @@ Set-ExecutionPolicy -ExecutionPolicy Default
 ```
 
 ### Invalid folder path
+
+![WindowsTerminal_soOeUqTpkg](https://user-images.githubusercontent.com/18073815/167960528-e0e0051b-5c47-43c8-91d3-4fde66d6663a.png)
 
 * If your folder path has a space, you may have to wrap the path in quotes ("").
     * `"C:\Users\Ryland\New Music\Trance"`
