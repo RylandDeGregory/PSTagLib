@@ -194,7 +194,7 @@ Press Enter to exit:
 * Ensure that you can execute scripts on your machine. Enter an **Administrator** PowerShell session and paste the following command:
 
 ```powershell
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```
 
 * If you change this setting, you **MUST** change it back when you are done using this tool.
