@@ -22,14 +22,14 @@ param (
 )
 
 # Import the TagLibSharp library
-if ($(Test-Path -Path $PSScriptRoot\taglib-sharp.dll)) {
+if ($(Test-Path -Path $PSScriptRoot\lib\TagLibSharp.dll)) {
     try {
-        Add-Type -Path $PSScriptRoot\taglib-sharp.dll
+        Add-Type -Path $PSScriptRoot\lib\TagLibSharp.dll
     } catch {
-        throw "Error importing TagLibSharp library: $($Error[0])"
+        Write-Error "Error importing TagLibSharp library: $($Error[0])"
     }
 } else {
-    throw 'Error importing TagLibSharp library. Ensure that taglib-sharp.dll is in the same directory as this script.'
+    Write-Error 'Error importing TagLibSharp library. Ensure that TagLibSharp.dll is in the same directory as this script.'
 }
 
 # Set delimiter character(s)
@@ -71,7 +71,7 @@ function Get-MP3Directory {
         try {
             $ValidDirectory = Test-Path -Path "$Directory"
         } catch {
-            throw "Error checking filesystem path supplied $($Error[0])"
+            Write-Error "Error checking filesystem path supplied $($Error[0])"
         }
     }
 
@@ -224,7 +224,7 @@ try {
     # Inform user of script completion
     Write-Host -ForegroundColor Green 'Complete.'
 } catch {
-    throw "Process failed. Please review errors: $Error"
+    Write-Error "Process failed. Please review errors: $Error"
 }
 # Wait for user input to terminate script
 Read-Host -Prompt 'Press [Enter] to exit'
