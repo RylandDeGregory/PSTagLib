@@ -66,7 +66,7 @@ if (-not $InputFile -and -not $InputURL) {
         }
     }
 
-    Write-Host -ForegroundColor Green -Message "MP3 files will be downloaded to the Desktop."
+    Write-Host -ForegroundColor Green -Message 'MP3 files will be downloaded to the Desktop.'
 
     if ($PSVersionTable.PSVersion.Major -ge 6) {
         if ($IsWindows) {
@@ -77,7 +77,7 @@ if (-not $InputFile -and -not $InputURL) {
             $OutputPath = $PSScriptRoot
         }
     } else {
-        OutputPath = "$env:USERPROFILE\Desktop\"
+        $OutputPath = "$env:USERPROFILE\Desktop\"
     }
 }
 
@@ -106,7 +106,7 @@ if ($InputURL) {
 Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputPath`n"
 foreach ($Item in $TracksForDownload) {
     $Uri = $Item -as [System.URI]
-	if ($null -ne $Uri.AbsoluteURI -and $Uri.Scheme -match '[http|https]') {
+    if ($null -ne $Uri.AbsoluteURI -and $Uri.Scheme -match '[http|https]') {
         try {
             # Download the track using the pre-defined output format
             Invoke-Expression "youtube-dl $Item -f $FileFormat -o '$OutputFormat'"

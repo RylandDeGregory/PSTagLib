@@ -13,12 +13,17 @@
 #region Init
 [CmdletBinding()]
 param (
+    # Filesystem path to the directory containing MP3 files for processing
     [Parameter()]
-    [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
+    [string] $Directory,
+
+    # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
     [Parameter()]
-    [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
+    [switch] $ProcessGenre,
+
+     # The value that will be set for the genre tag (overrides directory name)
     [Parameter()]
-    [string] $Genre # The value that will be set for the genre tag (overrides directory name)
+    [string] $Genre
 )
 
 # Import the TagLibSharp library
@@ -26,7 +31,7 @@ if ($(Test-Path -Path $PSScriptRoot\lib\TagLibSharp.dll)) {
     try {
         Add-Type -Path $PSScriptRoot\lib\TagLibSharp.dll
     } catch {
-        Write-Error "Error importing TagLibSharp library: $($Error[0])"
+        Write-Error "Error importing TagLibSharp library: $_"
     }
 } else {
     Write-Error 'Error importing TagLibSharp library. Ensure that TagLibSharp.dll is in the same directory as this script.'
@@ -45,8 +50,9 @@ function Get-MP3Directory {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false)]
-        [switch] $Gui # Compatible with Windows PowerShell ONLY. Whether or not to use a Windows forms graphical interface to browse for a directory.
+        # Compatible with Windows PowerShell ONLY. Whether or not to use a Windows forms graphical interface to browse for a directory.
+        [Parameter()]
+        [switch] $Gui
     )
 
     begin {
@@ -71,7 +77,7 @@ function Get-MP3Directory {
         try {
             $ValidDirectory = Test-Path -Path "$Directory"
         } catch {
-            Write-Error "Error checking filesystem path supplied $($Error[0])"
+            Write-Error "Error checking filesystem path supplied: $_"
         }
     }
 

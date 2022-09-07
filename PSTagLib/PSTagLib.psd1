@@ -27,7 +27,7 @@ Author = 'Ryland DeGregory'
 CompanyName = 'ryland.dev'
 
 # Copyright statement for this module
-Copyright = '(c) Ryland DeGregory. All rights reserved.'
+Copyright = '(c) Ryland DeGregory 2019-2022. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Automate media file metadata with PowerShell using the TagLibSharp library for .NET'
