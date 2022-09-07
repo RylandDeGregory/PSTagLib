@@ -19,20 +19,21 @@
         ./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1', 'https://soundcloud.com/ryland-degregory/sample2'
 #>
 #region Init
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'Url')]
 param (
     # Fully-qualified filesystem path to the file containing list of URLs to download
-    [Parameter()]
+    [Parameter(ParameterSetName = 'File')]
     [ValidatePattern('.*\.txt|csv$')]
     [string] $InputFile,
 
     # Fully-qualified filesystem path to the directory where MP3 files will be downloaded
     # Defaults to the same directory as the script
-    [Parameter()]
+    [Parameter(ParameterSetName = 'File')]
+    [Parameter(ParameterSetName = 'Url')]
     [string] $OutputPath = $PSScriptRoot,
 
     # URL or array of URLs to download
-    [Parameter()]
+    [Parameter(ParameterSetName = 'Url')]
     [ValidatePattern('^https?://')]
     [string[]] $InputURL
 )
@@ -51,10 +52,6 @@ if ($OutputPath[-1] -notin '/', '\' -and $OutputPath -ne '.') {
 # Set output format
 $OutputFormat = "$OutputPath%(title)s.%(ext)s"
 
-if ($InputFile -and $InputURL) {
-    throw '[ERROR] You cannot specify both -InputFile and -InputURL parameters.'
-}
-
 if (-not $InputFile -and -not $InputURL) {
     # Provide interactive user experience
     $Selection = Read-Host "Would you like to provide [1] a link, or [2] a file containing a list of links (one per line)? Type 1 or 2 and press Enter.`n"
@@ -70,7 +67,7 @@ if (-not $InputFile -and -not $InputURL) {
         }
     }
 
-    Write-Host -ForegroundColor Green -Message "MP3 files will be downloaded to the Desktop."
+    Write-Host -ForegroundColor Green -Message 'MP3 files will be downloaded to the Desktop.'
 
     if ($PSVersionTable.PSVersion.Major -ge 6) {
         if ($IsWindows) {
@@ -81,7 +78,7 @@ if (-not $InputFile -and -not $InputURL) {
             $OutputPath = $PSScriptRoot
         }
     } else {
-        OutputPath = "$env:USERPROFILE\Desktop\"
+        $OutputPath = "$env:USERPROFILE\Desktop\"
     }
 }
 
@@ -96,7 +93,7 @@ try {
 if ($InputFile) {
     # The user provided a file
     if ($InputFile -like '*.txt') {
-        $TracksForDownload = Get-Content -Path $InputFile
+        $TracksForDownload = Get-Content -Path $InputFile -Raw
     } elseif ($InputFile -like '*.csv') {
         $TracksForDownload = Import-Csv -Path $InputFile -Header 'Tracks' | Select-Object -Expand 'Tracks'
     }
@@ -110,7 +107,7 @@ if ($InputURL) {
 Write-Output "[INFO] Downloading $($TracksForDownload.Count) files to: $OutputPath`n"
 foreach ($Item in $TracksForDownload) {
     $Uri = $Item -as [System.URI]
-	if ($null -ne $Uri.AbsoluteURI -and $Uri.Scheme -match '[http|https]') {
+    if ($null -ne $Uri.AbsoluteURI -and $Uri.Scheme -match '[http|https]') {
         try {
             # Download the track using the pre-defined output format
             Invoke-Expression "youtube-dl $Item -f $FileFormat -o '$OutputFormat'"
