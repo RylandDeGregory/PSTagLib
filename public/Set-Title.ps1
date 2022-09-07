@@ -1,7 +1,7 @@
 function Set-Title {
     <#
         .SYNOPSIS
-            Set Title ID3 tag
+            Set Title ID3 tag.
         .DESCRIPTION
             Set Title ID3 tag using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.

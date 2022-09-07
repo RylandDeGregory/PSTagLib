@@ -1,7 +1,7 @@
 function Set-Artist {
     <#
         .SYNOPSIS
-            Set Artist ID3 tags
+            Set Artist ID3 tags.
         .DESCRIPTION
             Set AlbumArtists and Performers ID3 tags using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.

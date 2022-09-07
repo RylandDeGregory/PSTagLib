@@ -1,7 +1,7 @@
 function Get-Publisher {
     <#
         .SYNOPSIS
-            Get Publisher ID3 tag value
+            Get Publisher ID3 tag value.
         .DESCRIPTION
             Get Publisher ID3 tag value using TagLibSharp.
             Parameter can be supplied by name, by position, or using the pipeline. See examples.

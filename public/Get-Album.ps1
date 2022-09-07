@@ -1,7 +1,7 @@
 function Get-Artist {
     <#
         .SYNOPSIS
-            Get Album ID3 tag value
+            Get Album ID3 tag value.
         .DESCRIPTION
             Get Album ID3 tag value using TagLibSharp.
             Parameter can be supplied by name, by position, or using the pipeline. See examples.

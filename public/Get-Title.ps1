@@ -1,7 +1,7 @@
 function Get-Title {
     <#
         .SYNOPSIS
-            Get Title ID3 tag value
+            Get Title ID3 tag value.
         .DESCRIPTION
             Get Title ID3 tag value using TagLibSharp.
             Parameter can be supplied by name, by position, or using the pipeline. See examples.

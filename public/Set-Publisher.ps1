@@ -1,7 +1,7 @@
 function Set-Publisher {
     <#
         .SYNOPSIS
-            Set Publisher ID3 tag
+            Set Publisher ID3 tag.
         .DESCRIPTION
             Set Publisher ID3 tag using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.

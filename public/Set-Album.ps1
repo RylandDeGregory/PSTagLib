@@ -1,7 +1,7 @@
 function Set-Album {
     <#
         .SYNOPSIS
-            Set Album ID3 tag
+            Set Album ID3 tag.
         .DESCRIPTION
             Set Album ID3 tag using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.

@@ -1,12 +1,12 @@
-function Get-Title {
+function Get-Metadata {
     <#
         .SYNOPSIS
-            Get ID3 tag values
+            Get ID3 tag values.
         .DESCRIPTION
             Get ID3 tag values using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.
         .INPUTS
-            Filesystem path or array of paths.
+            Filesystem path or array of paths, ID3 tag name or array of tag names.
         .OUTPUTS
             PSCustomObject containing filesystem path and ID3 tag values.
         .EXAMPLE

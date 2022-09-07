@@ -1,7 +1,7 @@
 function Get-Genre {
     <#
         .SYNOPSIS
-            Get Genre ID3 tag value
+            Get Genre ID3 tag value.
         .DESCRIPTION
             Get Genre ID3 tag value using TagLibSharp.
             Parameter can be supplied by name, by position, or using the pipeline. See examples.

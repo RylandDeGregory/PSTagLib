@@ -1,7 +1,7 @@
 function Set-Genre {
     <#
         .SYNOPSIS
-            Set Genre ID3 tag
+            Set Genre ID3 tag.
         .DESCRIPTION
             Set Genre ID3 tag using TagLibSharp.
             Parameters can be supplied by name, by position, or using the pipeline. See examples.
