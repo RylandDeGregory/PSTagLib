@@ -19,10 +19,10 @@
         ./Invoke-MP3Download.ps1 -InputURL 'https://soundcloud.com/ryland-degregory/sample1', 'https://soundcloud.com/ryland-degregory/sample2'
 #>
 #region Init
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'Url')]
 param (
     # Fully-qualified filesystem path to the file containing list of URLs to download
-    [Parameter()]
+    [Parameter(ParameterSetName = 'File')]
     [ValidatePattern('.*\.txt|csv$')]
     [string] $InputFile,
 
@@ -32,7 +32,7 @@ param (
     [string] $OutputPath = $PSScriptRoot,
 
     # URL or array of URLs to download
-    [Parameter()]
+    [Parameter(ParameterSetName = 'Url')]
     [ValidatePattern('^https?://')]
     [string[]] $InputURL
 )
@@ -50,10 +50,6 @@ if ($OutputPath[-1] -notin '/', '\' -and $OutputPath -ne '.') {
 
 # Set output format
 $OutputFormat = "$OutputPath%(title)s.%(ext)s"
-
-if ($InputFile -and $InputURL) {
-    throw '[ERROR] You cannot specify both -InputFile and -InputURL parameters.'
-}
 
 if (-not $InputFile -and -not $InputURL) {
     # Provide interactive user experience
@@ -96,7 +92,7 @@ try {
 if ($InputFile) {
     # The user provided a file
     if ($InputFile -like '*.txt') {
-        $TracksForDownload = Get-Content -Path $InputFile
+        $TracksForDownload = Get-Content -Path $InputFile -Raw
     } elseif ($InputFile -like '*.csv') {
         $TracksForDownload = Import-Csv -Path $InputFile -Header 'Tracks' | Select-Object -Expand 'Tracks'
     }
