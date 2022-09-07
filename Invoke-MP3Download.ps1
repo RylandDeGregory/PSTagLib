@@ -28,7 +28,8 @@ param (
 
     # Fully-qualified filesystem path to the directory where MP3 files will be downloaded
     # Defaults to the same directory as the script
-    [Parameter()]
+    [Parameter(ParameterSetName = 'File')]
+    [Parameter(ParameterSetName = 'Url')]
     [string] $OutputPath = $PSScriptRoot,
 
     # URL or array of URLs to download
