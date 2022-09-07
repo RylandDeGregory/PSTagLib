@@ -45,7 +45,7 @@ function Get-Genre {
                     Write-Verbose "Getting Genre tag for file [$File]"
                     [PSCustomObject]@{
                         File  = [string]$File
-                        Genre = [string]$FileTags.Tag.Genre
+                        Genre = [string]$FileTags.Tag.Genres
                     }
             } else {
                 Write-Error "File [$File] is not valid filesystem path or does not exist"

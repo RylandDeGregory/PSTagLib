@@ -84,17 +84,23 @@ function Set-Metadata {
                 $MetadataObject = [PSCustomObject]@{
                     File = [string]$File
                 }
-                foreach ($MetadataProperty in $Property) {
+                foreach ($MetadataProperty in $Property.GetEnumerator()) {
                     if ($MetadataProperty -in $ValidProperties) {
                         Write-Verbose "Setting [$($MetadataProperty.Key)] property to [$($MetadataProperty.Value)] for file [$File]"
                         $FileTags.Property.$($MetadataProperty.Key) = $MetadataProperty.Value
                     } elseif ($MetadataProperty -in $ValidTags) {
                         Write-Verbose "Setting [$($MetadataProperty.Key)] tag to [$($MetadataProperty.Value)] for file [$File]"
                         $FileTags.Tag.$($MetadataProperty.Key) = $MetadataProperty.Value
+                    }  elseif ($MetadataProperty.Key -eq 'Artist') {
+                        $FileTags.Tag.Artists = $MetadataProperty.Value
+                        $FileTags.Tag.Performers = $MetadataProperty.Value
+                    } elseif ($MetadataProperty.Key -eq 'Genre') {
+                        $FileTags.Tag.Genres = $MetadataProperty.Value
                     } else {
                         Write-Warning "Property [$($MetadataProperty.Key)] is not a valid property or tag for file [$File]."
                         Write-Warning "Valid Properties: '$($ValidProperties -join ', ')'. Valid Tags: '$($ValidTags -join ', ')'."
                     }
+                    Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty.Key -NotePropertyValue $MetadataProperty.Value
                 }
                 try {
                     $FileTags.Save()

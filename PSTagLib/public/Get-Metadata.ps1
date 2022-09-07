@@ -100,7 +100,10 @@ function Get-Metadata {
                                 Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Tag.$($MetadataProperty)
                             } elseif ($MetadataProperty -eq 'Artist') {
                                 Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $($FileTags.Tag.Artists -join ', ')
-                            } else {
+                            }  elseif ($MetadataProperty.Key -eq 'Genre') {
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $($FileTags.Tag.Geres -join ', ')
+                            }
+                            else {
                                 Write-Warning "Property [$MetadataProperty] is not a valid property or tag for file [$File]."
                                 Write-Warning "Valid Properties: '$($ValidProperties -join ', ')'. Valid Tags: '$($ValidTags -join ', ')'."
                             }
