@@ -95,9 +95,11 @@ function Get-Metadata {
                     if (-not $All) {
                         foreach ($MetadataProperty in $Property) {
                             if ($MetadataProperty -in $ValidProperties) {
-                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Properties.$(MetadataProperty)
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Properties.$($MetadataProperty)
                             } elseif ($MetadataProperty -in $ValidTags) {
-                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Tags.$(MetadataProperty)
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Tag.$($MetadataProperty)
+                            } elseif ($MetadataProperty -eq 'Artist') {
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $($FileTags.Tag.Artists -join ', ')
                             } else {
                                 Write-Warning "Property [$MetadataProperty] is not a valid property or tag for file [$File]."
                                 Write-Warning "Valid Properties: '$($ValidProperties -join ', ')'. Valid Tags: '$($ValidTags -join ', ')'."
@@ -106,9 +108,9 @@ function Get-Metadata {
                     } else {
                         foreach ($MetadataProperty in ($ValidTags + $ValidProperties)) {
                             if ($MetadataProperty -in $ValidProperties) {
-                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Properties.$(MetadataProperty)
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Properties.$($MetadataProperty)
                             } elseif ($MetadataProperty -in $ValidTags) {
-                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Tags.$(MetadataProperty)
+                                Add-Member -InputObject $MetadataObject -NotePropertyName $MetadataProperty -NotePropertyValue $FileTags.Tags.$($MetadataProperty)
                             }
                         }
                     }

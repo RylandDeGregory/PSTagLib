@@ -87,10 +87,10 @@ function Set-Metadata {
                 foreach ($MetadataProperty in $Property) {
                     if ($MetadataProperty -in $ValidProperties) {
                         Write-Verbose "Setting [$($MetadataProperty.Key)] property to [$($MetadataProperty.Value)] for file [$File]"
-                        $FileTags.Property.$(MetadataProperty.Key) = $MetadataProperty.Value
+                        $FileTags.Property.$($MetadataProperty.Key) = $MetadataProperty.Value
                     } elseif ($MetadataProperty -in $ValidTags) {
                         Write-Verbose "Setting [$($MetadataProperty.Key)] tag to [$($MetadataProperty.Value)] for file [$File]"
-                        $FileTags.Tags.$(MetadataProperty.Key) = $MetadataProperty.Value
+                        $FileTags.Tag.$($MetadataProperty.Key) = $MetadataProperty.Value
                     } else {
                         Write-Warning "Property [$($MetadataProperty.Key)] is not a valid property or tag for file [$File]."
                         Write-Warning "Valid Properties: '$($ValidProperties -join ', ')'. Valid Tags: '$($ValidTags -join ', ')'."
