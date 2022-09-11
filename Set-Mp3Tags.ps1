@@ -26,15 +26,21 @@ param (
     [string] $Genre
 )
 
-# Import the TagLibSharp library
-if ($(Test-Path -Path $PSScriptRoot\lib\TagLibSharp.dll)) {
-    try {
-        Add-Type -Path $PSScriptRoot\lib\TagLibSharp.dll
-    } catch {
-        Write-Error "Error importing TagLibSharp library: $_"
-    }
+# Determine TagLibSharp library filesystem location relative to this script
+if ($(Test-Path -Path "$PSScriptRoot\lib\TagLibSharp.dll")) {
+    $AssemblyPath = "$PSScriptRoot\lib\TagLibSharp.dll"
+} elseif ($(Test-Path -Path "$PSScriptRoot\TagLibSharp.dll")) {
+    $AssemblyPath = "$PSScriptRoot\TagLibSharp.dll"
 } else {
     Write-Error 'Error importing TagLibSharp library. Ensure that TagLibSharp.dll is in the same directory as this script.'
+    exit
+}
+
+# Import the TagLibSharp library
+try {
+    Add-Type -Path $AssemblyPath
+} catch {
+    Write-Error "Error importing TagLibSharp library: $_"
 }
 
 # Set delimiter character(s)
