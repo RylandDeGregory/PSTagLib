@@ -1,17 +1,15 @@
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ModulePath = Split-Path -Parent $PSCommandPath
+$ModuleName = Split-Path -Path $ModulePath -Leaf
 
-$modulePath = $here
-$moduleName = Split-Path -Path $modulePath -Leaf
-
-Describe "'$moduleName' Module Analysis with PSScriptAnalyzer" {
+Describe "'$ModuleName' Module Analysis with PSScriptAnalyzer" {
     Context 'Standard Rules' {
         # Define PSScriptAnalyzer rules
-        $scriptAnalyzerRules = Get-ScriptAnalyzerRule
+        $ScriptAnalyzerRules = Get-ScriptAnalyzerRule
 
         # Perform analysis against each rule
-        forEach ($rule in $scriptAnalyzerRules) {
-            It "should pass '$rule' rule" {
-                Invoke-ScriptAnalyzer -Path "$here\$moduleName.psm1" -IncludeRule $rule | Should -BeNullOrEmpty
+        forEach ($Rule in $ScriptAnalyzerRules) {
+            It "should pass '$Rule' rule" {
+                Invoke-ScriptAnalyzer -Path "$ModulePath\$ModuleName.psm1" -IncludeRule $Rule | Should -BeNullOrEmpty
             }
         }
     }
@@ -19,11 +17,11 @@ Describe "'$moduleName' Module Analysis with PSScriptAnalyzer" {
 
 # Dynamically defining the functions to analyze
 $FunctionPaths = @()
-if (Test-Path -Path "$modulePath\private\*.ps1") {
-    $FunctionPaths += Get-ChildItem -Path "$modulePath\private\*.ps1" -Exclude "*.Tests.*"
+if (Test-Path -Path "$ModulePath\private\*.ps1") {
+    $FunctionPaths += Get-ChildItem -Path "$ModulePath\private\*.ps1" -Exclude "*.Tests.*"
 }
-if (Test-Path -Path "$modulePath\public\*.ps1") {
-    $FunctionPaths += Get-ChildItem -Path "$modulePath\public\*.ps1" -Exclude "*.Tests.*"
+if (Test-Path -Path "$ModulePath\public\*.ps1") {
+    $FunctionPaths += Get-ChildItem -Path "$ModulePath\public\*.ps1" -Exclude "*.Tests.*"
 }
 
 # Running the analysis for each function
@@ -33,11 +31,11 @@ foreach ($FunctionPath in $FunctionPaths) {
     Describe "'$FunctionName' Function Analysis with PSScriptAnalyzer" {
         Context 'Standard Rules' {
             # Define PSScriptAnalyzer rules
-            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule # Just getting all default rules
+            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule
 
             # Perform analysis against each rule
             forEach ($Rule in $ScriptAnalyzerRules) {
-                It "should pass '$rule' rule" {
+                It "should pass '$Rule' rule" {
                     Invoke-ScriptAnalyzer -Path $FunctionPath -IncludeRule $Rule | Should -BeNullOrEmpty
                 }
             }
