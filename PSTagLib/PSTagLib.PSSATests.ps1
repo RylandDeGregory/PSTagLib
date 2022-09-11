@@ -33,7 +33,7 @@ foreach ($FunctionPath in $FunctionPaths) {
     Describe "'$FunctionName' Function Analysis with PSScriptAnalyzer" {
         Context 'Standard Rules' {
             # Define PSScriptAnalyzer rules
-            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule # Just getting all default rules
+            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule | Where-Object { $_.RuleName -ne 'PSUseShouldProcessForStateChangingFunction' }
 
             # Perform analysis against each rule
             foreach ($Rule in $ScriptAnalyzerRules) {
