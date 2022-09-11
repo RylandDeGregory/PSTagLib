@@ -1,39 +1,39 @@
-$ModulePath = Split-Path -Parent $PSCommandPath
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 #region Reloading SUT
 # Ensuring that we are testing this version of module and not any other version that could be in memory
-$RootModulePath = "$($PSCommandPath -replace '.Tests.ps1$', '').psm1"
-$ModuleName = (($RootModulePath | Split-Path -Leaf) -replace '.psm1')
+$ModulePath = "$($MyInvocation.MyCommand.Path -replace '.Tests.ps1$', '').psm1"
+$ModuleName = (($ModulePath | Split-Path -Leaf) -replace '.psm1')
 @(Get-Module -Name $ModuleName).where({ $_.version -ne '0.0' }) | Remove-Module # Removing all module versions from the current context if there are any
-Import-Module -Name $RootModulePath -Force -ErrorAction Stop # Loading module explicitly by path and not via the manifest
+Import-Module -Name $ModulePath -Force -ErrorAction Stop # Loading module explicitly by path and not via the manifest
 #endregion
 
 Describe "'$ModuleName' Module Tests" {
 
     Context 'Module Setup' {
         It 'should have a root module' {
-            Test-Path $RootModulePath | Should -Be $true
+            Test-Path $ModulePath | Should -Be $true
         }
 
         It 'should have an associated manifest' {
-            Test-Path "$ModulePath\$ModuleName.psd1" | Should -Be $true
+            Test-Path "$here\$ModuleName.psd1" | Should -Be $true
         }
 
         It 'should have public functions' {
-            Test-Path "$ModulePath\public\*.ps1" | Should -Be $true
+            Test-Path "$here\public\*.ps1" | Should -Be $true
         }
 
         It 'should be a valid PowerShell code' {
-            $psFile = Get-Content -Path $RootModulePath -ErrorAction Stop
+            $PSFile = Get-Content -Path $ModulePath -ErrorAction Stop
             $errors = $null
-            $null = [System.Management.Automation.PSParser]::Tokenize($psFile, [ref]$errors)
+            $null = [System.Management.Automation.PSParser]::Tokenize($PSFile, [ref]$errors)
             $errors.Count | Should -Be 0
         }
     }
 
     Context 'Module Control' {
         It 'should import without errors' {
-            { Import-Module -Name $RootModulePath -Force -ErrorAction Stop } | Should -Not -Throw
+            { Import-Module -Name $ModulePath -Force -ErrorAction Stop } | Should -Not -Throw
             Get-Module -Name $ModuleName | Should -Not -BeNullOrEmpty
         }
 
@@ -46,11 +46,11 @@ Describe "'$ModuleName' Module Tests" {
 
 # Dynamically defining the functions to test
 $FunctionPaths = @()
-if (Test-Path -Path "$ModulePath\private\*.ps1") {
-    $FunctionPaths += Get-ChildItem -Path "$ModulePath\private\*.ps1" -Exclude '*.Tests.*'
+if (Test-Path -Path "$here\private\*.ps1") {
+    $FunctionPaths += Get-ChildItem -Path "$here\private\*.ps1" -Exclude '*.Tests.*'
 }
-if (Test-Path -Path "$ModulePath\public\*.ps1") {
-    $FunctionPaths += Get-ChildItem -Path "$ModulePath\public\*.ps1" -Exclude '*.Tests.*'
+if (Test-Path -Path "$here\public\*.ps1") {
+    $FunctionPaths += Get-ChildItem -Path "$here\public\*.ps1" -Exclude '*.Tests.*'
 }
 
 
@@ -72,9 +72,9 @@ foreach ($FunctionPath in $FunctionPaths) {
             }
 
             It 'should be a valid PowerShell code' {
-                $psFile = Get-Content -Path $FunctionPath -ErrorAction Stop
+                $PSFile = Get-Content -Path $FunctionPath -ErrorAction Stop
                 $errors = $null
-                $null = [System.Management.Automation.PSParser]::Tokenize($psFile, [ref]$errors)
+                $null = [System.Management.Automation.PSParser]::Tokenize($PSFile, [ref]$errors)
                 $errors.Count | Should -Be 0
             }
 
@@ -107,14 +107,14 @@ foreach ($FunctionPath in $FunctionPaths) {
             }
 
             # Getting the list of function parameters
-            # $parameters = $ParsedFunction.Body.ParamBlock.Parameters.name.VariablePath.Foreach{ $_.ToString() }
+            $Parameters = $ParsedFunction.Body.ParamBlock.Parameters.name.VariablePath.Foreach{ $_.ToString() }
 
-            # foreach ($parameter in $parameters) {
-            #     It "should have descriptive help for '$parameter' parameter" {
-            #         $FunctionHelp.Parameters.($parameter.ToUpper()) | Should -Not -BeNullOrEmpty
-            #         $FunctionHelp.Parameters.($parameter.ToUpper()).Length | Should -BeGreaterThan 25
-            #     }
-            # }
+            foreach ($Parameter in $Parameters) {
+                It "should have descriptive help for '$Parameter' parameter" {
+                    $FunctionHelp.Parameters.($Parameter.ToUpper()) | Should -Not -BeNullOrEmpty
+                    $FunctionHelp.Parameters.($Parameter.ToUpper()).Length | Should -BeGreaterThan 25
+                }
+            }
         }
     }
 }

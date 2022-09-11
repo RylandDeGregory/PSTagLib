@@ -1,4 +1,6 @@
-$ModulePath = Split-Path -Parent $PSCommandPath
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+$ModulePath = $here
 $ModuleName = Split-Path -Path $ModulePath -Leaf
 
 Describe "'$ModuleName' Module Analysis with PSScriptAnalyzer" {
@@ -7,9 +9,9 @@ Describe "'$ModuleName' Module Analysis with PSScriptAnalyzer" {
         $ScriptAnalyzerRules = Get-ScriptAnalyzerRule
 
         # Perform analysis against each rule
-        forEach ($Rule in $ScriptAnalyzerRules) {
+        foreach ($Rule in $ScriptAnalyzerRules) {
             It "should pass '$Rule' rule" {
-                Invoke-ScriptAnalyzer -Path "$ModulePath\$ModuleName.psm1" -IncludeRule $Rule | Should -BeNullOrEmpty
+                Invoke-ScriptAnalyzer -Path "$here\$ModuleName.psm1" -IncludeRule $Rule | Should -BeNullOrEmpty
             }
         }
     }
@@ -31,10 +33,10 @@ foreach ($FunctionPath in $FunctionPaths) {
     Describe "'$FunctionName' Function Analysis with PSScriptAnalyzer" {
         Context 'Standard Rules' {
             # Define PSScriptAnalyzer rules
-            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule
+            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule # Just getting all default rules
 
             # Perform analysis against each rule
-            forEach ($Rule in $ScriptAnalyzerRules) {
+            foreach ($Rule in $ScriptAnalyzerRules) {
                 It "should pass '$Rule' rule" {
                     Invoke-ScriptAnalyzer -Path $FunctionPath -IncludeRule $Rule | Should -BeNullOrEmpty
                 }
