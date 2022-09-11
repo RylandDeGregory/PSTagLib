@@ -299,7 +299,7 @@ task CodeCoverage {
 
     # Fail the task if the code coverage results are not acceptable
     if ($actualCodeCoveragePercent -lt $acceptableCodeCoveragePercent) {
-        throw "The overall code coverage by Pester tests is $actualCodeCoveragePercent% which is less than the quality gate of $acceptableCodeCoveragePercent%. Pester ModuleVersion is: $((Get-Module -Name Pester -ListAvailable).ModuleVersion)."
+        throw "The overall code coverage by Pester tests is $actualCodeCoveragePercent% which is less than the quality gate of $acceptableCodeCoveragePercent%. Pester ModuleVersion is: $((Get-Module -Name Pester -ListAvailable).Version)."
     }
 }
 
