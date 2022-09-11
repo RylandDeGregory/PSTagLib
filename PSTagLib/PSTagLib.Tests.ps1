@@ -105,16 +105,6 @@ foreach ($FunctionPath in $FunctionPaths) {
                 $FunctionHelp.Examples[0] | Should -Match ([regex]::Escape($FunctionName))
                 $FunctionHelp.Examples[0].Length | Should -BeGreaterThan ($FunctionName.Length + 10)
             }
-
-            # Getting the list of function parameters
-            $Parameters = $ParsedFunction.Body.ParamBlock.Parameters.name.VariablePath.Foreach{ $_.ToString() }
-
-            foreach ($Parameter in $Parameters) {
-                It "should have descriptive help for '$Parameter' parameter" {
-                    $FunctionHelp.Parameters.($Parameter.ToUpper()) | Should -Not -BeNullOrEmpty
-                    $FunctionHelp.Parameters.($Parameter.ToUpper()).Length | Should -BeGreaterThan 25
-                }
-            }
         }
     }
 }
