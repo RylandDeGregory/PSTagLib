@@ -1,4 +1,4 @@
-function Get-Metadata {
+function Get-TagLibProperty {
     <#
         .SYNOPSIS
             Get ID3 tag values.
@@ -10,11 +10,11 @@ function Get-Metadata {
         .OUTPUTS
             PSCustomObject containing filesystem path and ID3 tag values.
         .EXAMPLE
-            Get-Metadata -File '~/Music/Trance/Above & Beyond/Tri-State/Indonesia.mp3' -All
+            Get-TagLibProperty -File '~/Music/Trance/Above & Beyond/Tri-State/Indonesia.mp3' -All
         .EXAMPLE
-            Get-Metadata './Download.flac' -Property 'Album', 'Artists', 'Title'
+            Get-TagLibProperty './Download.flac' -Property 'Album', 'Artists', 'Title'
         .EXAMPLE
-            (Get-ChildItem -Filter *.aiff -Path 'C:\Users\user1\Music\Beatport-20220904').FullName | Get-Metadata -Property 'Title', 'Duration', 'BeatsPerMinute'
+            (Get-ChildItem -Filter *.aiff -Path 'C:\Users\user1\Music\Beatport-20220904').FullName | Get-TagLibProperty -Property 'Title', 'Duration', 'BeatsPerMinute'
     #>
     [CmdletBinding(DefaultParameterSetName = 'Properties')]
     [OutputType([System.Object[]])]
@@ -34,7 +34,7 @@ function Get-Metadata {
     )
 
     begin {
-        Write-Verbose 'Entering Get-Metadata Function'
+        Write-Verbose 'Entering Get-TagLibProperty Function'
 
         $ValidProperties = @(
             'AudioBitrate',
@@ -126,6 +126,6 @@ function Get-Metadata {
     }
 
     end {
-        Write-Verbose 'Exiting Get-Metadata Function'
+        Write-Verbose 'Exiting Get-TagLibProperty Function'
     }
 }

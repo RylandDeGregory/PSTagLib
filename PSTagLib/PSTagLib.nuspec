@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>PSTagLib</id>
+    <version>0.0.1</version>
+    <authors>Ryland DeGregory</authors>
+    <description>Automate media file metadata with PowerShell using the TagLibSharp library for .NET</description>
+    <copyright>(c) Ryland DeGregory 2019-2022</copyright>
+    <licenseUrl>https://github.com/RylandDeGregory/PSTagLib/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/RylandDeGregory/PSTagLib</projectUrl>
+  </metadata>
+</package>

@@ -12,7 +12,7 @@
 RootModule = 'PSTagLib.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '0.0.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Desktop', 'Core')
@@ -27,7 +27,7 @@ Author = 'Ryland DeGregory'
 CompanyName = 'ryland.dev'
 
 # Copyright statement for this module
-Copyright = '(c) Ryland DeGregory 2019-2022. All rights reserved.'
+Copyright = '(c) Ryland DeGregory 2019-2022'
 
 # Description of the functionality provided by this module
 Description = 'Automate media file metadata with PowerShell using the TagLibSharp library for .NET'
@@ -102,13 +102,13 @@ FileList = @('.\lib\TagLibSharp.dll',
              '.\public\Get-Album.ps1',
              '.\public\Get-Artist.ps1',
              '.\public\Get-Genre.ps1',
-             '.\public\Get-Metadata.ps1',
+             '.\public\Get-TagLibProperty.ps1',
              '.\public\Get-Publisher.ps1'
              '.\public\Get-Title.ps1',
              '.\public\Set-Album.ps1',
              '.\public\Set-Artist.ps1',
              '.\public\Set-Genre.ps1',
-             '.\public\Set-Metadata.ps1',
+             '.\public\Set-TagLibProperty.ps1',
              '.\public\Set-Publisher.ps1'
              '.\public\Set-Title.ps1')
 

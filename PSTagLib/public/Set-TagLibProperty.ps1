@@ -1,4 +1,4 @@
-function Set-Metadata {
+function Set-TagLibProperty {
     <#
         .SYNOPSIS
             Set ID3 tag values.
@@ -10,9 +10,9 @@ function Set-Metadata {
         .OUTPUTS
             PSCustomObject containing filesystem path and updated ID3 tag values.
         .EXAMPLE
-            Set-Metadata -File '~/Music/Trance/Above & Beyond/Tri-State/Indonesia.mp3' -Property @{'Year' = '2005'; 'Publisher' = 'Anjunabeats'}
+            Set-TagLibProperty -File '~/Music/Trance/Above & Beyond/Tri-State/Indonesia.mp3' -Property @{'Year' = '2005'; 'Publisher' = 'Anjunabeats'}
         .EXAMPLE
-            Set-Metadata './Download.flac' -Property @{'Album' = 'Counting The Points'; 'Artist' = 'Andrew Bayer'}
+            Set-TagLibProperty './Download.flac' -Property @{'Album' = 'Counting The Points'; 'Artist' = 'Andrew Bayer'}
    #>
     [CmdletBinding()]
     [OutputType([System.Object[]])]
@@ -27,7 +27,7 @@ function Set-Metadata {
     )
 
     begin {
-        Write-Verbose 'Entering Set-Metadata Function'
+        Write-Verbose 'Entering Set-TagLibProperty Function'
 
         $ValidProperties = @(
             'AudioBitrate',
