@@ -78,10 +78,10 @@ foreach ($FunctionPath in $FunctionPaths) {
                 $errors.Count | Should -Be 0
             }
 
-            It 'should have tests' {
-                Test-Path ($FunctionPath -replace '.ps1', '.Tests.ps1') | Should -Be $true
-        ($FunctionPath -replace '.ps1', '.Tests.ps1') | Should -FileContentMatch "Describe `"'$FunctionName'"
-            }
+            # It 'should have tests' {
+            #     Test-Path ($FunctionPath -replace '.ps1', '.Tests.ps1') | Should -Be $true
+            #     ($FunctionPath -replace '.ps1', '.Tests.ps1') | Should -FileContentMatch "Describe `"'$FunctionName'"
+            # }
         }
 
         Context 'Function Help Quality Tests' {

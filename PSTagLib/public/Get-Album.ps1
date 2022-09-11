@@ -1,4 +1,4 @@
-function Get-Artist {
+function Get-Album {
     <#
         .SYNOPSIS
             Get Album ID3 tag value.
