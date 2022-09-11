@@ -6,7 +6,7 @@ $ModuleName = Split-Path -Path $ModulePath -Leaf
 Describe "'$ModuleName' Module Analysis with PSScriptAnalyzer" {
     Context 'Standard Rules' {
         # Define PSScriptAnalyzer rules
-        $ScriptAnalyzerRules = Get-ScriptAnalyzerRule | Where-Object { $_.RuleName -ne 'PSUseShouldProcessForStateChangingFunction' }
+        $ScriptAnalyzerRules = Get-ScriptAnalyzerRule | Where-Object { $_.RuleName -ne 'PSUseShouldProcessForStateChangingFunctions' }
 
         # Perform analysis against each rule
         foreach ($Rule in $ScriptAnalyzerRules) {
@@ -33,7 +33,7 @@ foreach ($FunctionPath in $FunctionPaths) {
     Describe "'$FunctionName' Function Analysis with PSScriptAnalyzer" {
         Context 'Standard Rules' {
             # Define PSScriptAnalyzer rules
-            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule | Where-Object { $_.RuleName -ne 'PSUseShouldProcessForStateChangingFunction' }
+            $ScriptAnalyzerRules = Get-ScriptAnalyzerRule | Where-Object { $_.RuleName -ne 'PSUseShouldProcessForStateChangingFunctions' }
 
             # Perform analysis against each rule
             foreach ($Rule in $ScriptAnalyzerRules) {
