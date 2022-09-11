@@ -102,13 +102,13 @@ FileList = @('.\lib\TagLibSharp.dll',
              '.\public\Get-Album.ps1',
              '.\public\Get-Artist.ps1',
              '.\public\Get-Genre.ps1',
-             '.\public\Get-Metadata.ps1',
+             '.\public\Get-TagLibProperty.ps1',
              '.\public\Get-Publisher.ps1'
              '.\public\Get-Title.ps1',
              '.\public\Set-Album.ps1',
              '.\public\Set-Artist.ps1',
              '.\public\Set-Genre.ps1',
-             '.\public\Set-Metadata.ps1',
+             '.\public\Set-TagLibProperty.ps1',
              '.\public\Set-Publisher.ps1'
              '.\public\Set-Title.ps1')
 
