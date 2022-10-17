@@ -2,9 +2,11 @@
 
 A collection of PowerShell utilities for downloading and tagging MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp).
 
+> PSTagLib [PowerShell module](https://dev.azure.com/rylanddegregory/PSTagLib/_artifacts/feed/PSTagLib/NuGet/PSTagLib/overview/0.0.2) source is located in the `PSTagLib/` directory.
+
 * [Installation](#installation)
 * [Download MP3 files](#download-mp3-files)
-* [Set MP3 tags](#Set-MP3-metadata-tags)
+* [Set MP3 tags](#set-mp3-metadata-tags)
 * [Troubleshooting](#troubleshooting)
 * [License](#license)
 
@@ -51,7 +53,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable('PATH')
 
 1. Determine the files you want to download by collecting their URLs from the website(s) you want to download them from.
 1. If you have multiple URLs, paste the URLs into a `.txt` or `.csv` file **one per line**, and save the file into the `PSTagLib` directory.
-1. Open PowerShell. See the [Installation](#Installation) section for details.
+1. Open PowerShell. See the [Installation](#installation) section for details.
 
 #### Interactive download
 
@@ -61,7 +63,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable('PATH')
     * `2`: Drag and drop the `.txt` or `.csv` file you created above into the PowerShell window. Press Enter.
 1. The MP3 files corresponding to the link(s) provided will be downloaded to the Desktop, and a log of operations (including any errors, see [Troubleshooting](#troubleshooting)) will be written to the PowerShell window.
 
-> If you are satisfied with the results of your MP3 file download(s), proceed to the [Set MP3 tags](#Set-MP3-metadata-tags) section to set the metadata tags for the newly-downloaded MP3 files.
+> If you are satisfied with the results of your MP3 file download(s), proceed to the [Set MP3 tags](#set-mp3-metadata-tags) section to set the metadata tags for the newly-downloaded MP3 files.
 
 #### Programmatic download
 
@@ -97,7 +99,7 @@ Get-Help -Full ./Invoke-MP3Download.ps1
 
 The MP3 files corresponding to the link(s) provided will be downloaded, and a log of operations (including any errors, see [Troubleshooting](#troubleshooting)) will be written to the PowerShell window.
 
-> If you are satisfied with the results of your MP3 file download(s), proceed to the [Set MP3 tags](#Set-MP3-metadata-tags) section to set the metadata tags for the newly-downloaded MP3 files.
+> If you are satisfied with the results of your MP3 file download(s), proceed to the [Set MP3 tags](#set-mp3-metadata-tags) section to set the metadata tags for the newly-downloaded MP3 files.
 
 ## Set MP3 Metadata tags
 
@@ -124,7 +126,7 @@ C:\Users\Ryland\Music\Trance\Factor B feat. Cat Martin Crashing Over (Extended M
 
 #### Example 1
 
-1. Open PowerShell. See the [Installation](#Installation) section for details.
+1. Open PowerShell. See the [Installation](#installation) section for details.
 1. Drag and drop `Set-MP3Tags.ps1` into the PowerShell window. Press Enter.
 1. Follow prompt to select the folder it will process.
 
@@ -214,7 +216,7 @@ Set-ExecutionPolicy -ExecutionPolicy Default
 
 ### Filename improperly formatted
 
-* If you receive the following error message on any of your files, review the naming convention defined at the top of the [Use](#Use) section.
+* If you receive the following error message on any of your files, review the naming convention defined (default ` - `).
     * If you desire, you may modify the delimiter by which the script processes files. In `Set-MP3Tags.ps1`, modify the value of `$delimiter` at the top of the script.
 
 ```text

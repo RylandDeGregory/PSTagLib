@@ -4,6 +4,8 @@ trigger:
       - master
       - feature/*
   paths:
+    include:
+      - PSTagLib/*
     exclude:
       - README.md
 
