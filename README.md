@@ -218,7 +218,7 @@ Set-ExecutionPolicy -ExecutionPolicy Default
 
 ### Filename improperly formatted
 
-* If you receive the following error message on any of your files, review the naming convention defined (default ` - `).
+* If you receive the following error message on any of your files, review the naming convention (default `Artist - Title`).
     * If you desire, you may modify the delimiter by which the script processes files. In `Set-MP3Tags.ps1`, modify the value of `$delimiter` at the top of the script.
 
 ```text
