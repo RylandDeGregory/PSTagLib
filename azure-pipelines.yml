@@ -8,6 +8,7 @@ trigger:
       - PSTagLib/*
     exclude:
       - README.md
+      - PSTagLib/README.md
 
 pool:
   vmImage: 'windows-latest'
