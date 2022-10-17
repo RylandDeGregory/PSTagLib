@@ -2,6 +2,8 @@
 
 A collection of PowerShell utilities for downloading and tagging MP3 files with [TagLibSharp](https://github.com/mono/taglib-sharp).
 
+[![Build Status](https://dev.azure.com/rylanddegregory/PSTagLib/_apis/build/status/Build%20%26%20Publish?branchName=master)](https://dev.azure.com/rylanddegregory/PSTagLib/_build/latest?definitionId=13&branchName=master) [![PSTagLib package in PSTagLib feed in Azure Artifacts](https://feeds.dev.azure.com/rylanddegregory/702532c8-d17b-41e2-a97f-826f1f04b525/_apis/public/Packaging/Feeds/PSTagLib/Packages/7067aeb7-4e50-4c15-ac18-f8b2673848b6/Badge)](https://dev.azure.com/rylanddegregory/PSTagLib/_artifacts/feed/PSTagLib/NuGet/PSTagLib?preferRelease=true)
+
 > PSTagLib [PowerShell module](https://dev.azure.com/rylanddegregory/PSTagLib/_artifacts/feed/PSTagLib/NuGet/PSTagLib/overview/0.0.2) source is located in the `PSTagLib/` directory.
 
 * [Installation](#installation)
