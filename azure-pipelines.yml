@@ -4,8 +4,11 @@ trigger:
       - master
       - feature/*
   paths:
+    include:
+      - PSTagLib/*
     exclude:
       - README.md
+      - PSTagLib/README.md
 
 pool:
   vmImage: 'windows-latest'

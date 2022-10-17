@@ -26,22 +26,8 @@ param (
     [string] $Genre
 )
 
-# Determine TagLibSharp library filesystem location relative to this script
-if ($(Test-Path -Path "$PSScriptRoot\lib\TagLibSharp.dll")) {
-    $AssemblyPath = "$PSScriptRoot\lib\TagLibSharp.dll"
-} elseif ($(Test-Path -Path "$PSScriptRoot\TagLibSharp.dll")) {
-    $AssemblyPath = "$PSScriptRoot\TagLibSharp.dll"
-} else {
-    Write-Error 'Error importing TagLibSharp library. Ensure that TagLibSharp.dll is in the same directory as this script.'
-    exit
-}
-
-# Import the TagLibSharp library
-try {
-    Add-Type -Path $AssemblyPath
-} catch {
-    Write-Error "Error importing TagLibSharp library: $_"
-}
+# Import PSTagLib module
+Import-Module './PSTagLib/PSTagLib.psd1'
 
 # Set delimiter character(s)
 # default: ' - ' (space hyphen space)
@@ -58,11 +44,15 @@ function Get-MP3Directory {
     param (
         # Compatible with Windows PowerShell ONLY. Whether or not to use a Windows forms graphical interface to browse for a directory.
         [Parameter()]
+        [ValidateScript({
+            $PSVersionTable.PSVersion.Major -lt 6
+        })]
         [switch] $Gui
     )
 
-    begin {
+    process {
         if ($Gui) {
+            # Open Windows file browser dialog
             Write-Host -ForegroundColor Blue 'What is the path to the folder you want to process?'
             Start-Sleep -Milliseconds 500
             [System.Reflection.Assembly]::LoadWithPartialName('System.windows.forms') | Out-Null
@@ -76,18 +66,14 @@ function Get-MP3Directory {
             $Directory = Read-Host 'What is the path to the folder you want to process?'
             Write-Host "You entered: '$Directory'"
         }
-    }
 
-    process {
         # Ensure that the filesystem path supplied is valid
         try {
             $ValidDirectory = Test-Path -Path "$Directory"
         } catch {
             Write-Error "Error checking filesystem path supplied: $_"
         }
-    }
 
-    end {
         if ($ValidDirectory) {
             return $Directory
         } else {
@@ -98,85 +84,82 @@ function Get-MP3Directory {
 } #endfunction Get-MP3Directory
 function Set-MP3MetadataTags {
     <#
-    .SYNOPSIS
-       Add MP3 metadata tags to files based on file naming convention 'Artist${delimiter}Title (Mix)'. Optionally set MP3 genre tag.
-#>
+        .SYNOPSIS
+            Add MP3 metadata tags to files based on file naming convention 'Artist${delimiter}Title (Mix)'. Optionally set MP3 genre tag.
+    #>
     param (
-        [Parameter(Mandatory = $true)]
-        [string] $Directory, # Filesystem path to the directory containing MP3 files for processing
+         # Filesystem path to the directory containing MP3 files for processing
+        [Parameter(Mandatory)]
+        [string] $Directory,
+
+        # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
         [Parameter()]
-        [switch] $ProcessGenre, # Whether or not the genre tag will be set by the script. If provided without Genre parameter, sets the genre to the name of the directory.
+        [switch] $ProcessGenre,
+
+        # The value that will be set for the genre tag (overrides directory name)
         [Parameter()]
-        [string] $Genre # The value that will be set for the genre tag (overrides directory name)
+        [string] $Genre
     )
-
-    begin {
-        Write-Output '----------'
-
+    process {
+        # Determine if genre will be set as part of the tagging operation
         if ($ProcessGenre -and $Genre) {
             Write-Output "Genre for this directory is [$Genre]."
         } elseif ($ProcessGenre -and -not $Genre) {
             Write-Output 'Genre was not specified, using directory name.'
         }
-
-        Write-Output "Processing $Directory with Genre $Genre"
-    }
-
-    process {
-        # Process all .mp3 files in the directory
-        $Files = Get-ChildItem $Directory
-        foreach ($File in $Files) {
-            if ($File.Extension -eq '.mp3') {
-                # Split on pre-defined delimiter
-                $Items = $File.BaseName -Split $Delimiter
-                $File.FullName
-
-                # Check if filename is properly formatted
-                if ($Items.Count -eq 2) {
-                    $Artist = $Items[0].Trim()
-                    $Title  = $Items[1].Trim()
-                } else {
-                    Write-Host -ForegroundColor Red '***Filename improperly formatted. This file will be skipped.***'
-                    Write-Output '----------'
-                    continue
-                }
-
-                try {
-                    # Invoke TagLibSharp library to set MP3 metadata tags
-                    $Tag = [TagLib.File]::Create($File.FullName)
-
-                    Write-Output "Artist: $Artist"
-                    $Tag.Tag.AlbumArtists = $Artist
-                    $Tag.Tag.Performers   = $Artist
-
-                    Write-Output "Title: $Title"
-                    $Tag.Tag.Title = $Title
-
-                    if ($ProcessGenre) {
-                        if (-not $Genre) {
-                            # If a genre wasn't defined by the user, use the name of the directory
-                            $FileGenre = $File.DirectoryName | Split-Path -Leaf
-                            Write-Output "Genre: $FileGenre"
-                            $Tag.Tag.Genres = $FileGenre
-                        } else {
-                            Write-Output "Genre: $Genre"
-                            $Tag.Tag.Genres = $Genre
-                        }
-                    }
-
-                    # Commit the MP3 metadata tag changes to the file
-                    $Tag.Save()
-                } catch {
-                    Write-Host -ForegroundColor DarkYellow "Error setting MP3 tags for file [$($File.FullName)]"
-                    continue
-                }
-                Write-Output '----------'
-            }
+        if ($Genre) {
+            Write-Output "Processing $Directory with Genre $Genre"
+        } else {
+            Write-Output "Processing $Directory"
         }
-    }
+        Write-Output '----------'
 
-    end {
-        Write-Verbose 'Completed'
+        # Process all audio files in the directory
+        $Files = Get-ChildItem $Directory | Where-Object { $_.Extension -in '.mp3', '.flac', '.aiff' }
+        foreach ($File in $Files) {
+            # Split on pre-defined delimiter
+            $Items = $File.BaseName -Split $Delimiter
+            $File.FullName
+
+            # Check if filename is properly formatted
+            if ($Items.Count -eq 2) {
+                $Artist = $Items[0].Trim()
+                $Title  = $Items[1].Trim()
+            } else {
+                Write-Host -ForegroundColor Red '***Filename improperly formatted. This file will be skipped.***'
+                Write-Output '----------'
+                continue
+            }
+
+            try {
+                # Invoke PSTagLib module to set Artist tag
+                Write-Output "Artist: $Artist"
+                Set-Artist -File $File.FullName -Artist $Artist
+
+                # Invoke PSTagLib module to set Title tag
+                Write-Output "Title: $Title"
+                Set-Title -File $File.FullName -Title $Title
+
+                if ($ProcessGenre) {
+                    if (-not $Genre) {
+                        # If a genre wasn't defined by the user, use the name of the directory
+                        # Invoke PSTagLib module to set Genre tag
+                        $FileGenre = $File.DirectoryName | Split-Path -Leaf
+                        Write-Output "Genre: $FileGenre"
+                        Set-Genre -File $File.FullName -Genre $Genre
+                    } else {
+                        Write-Output "Genre: $Genre"
+                        Set-Genre -File $File.FullName -Genre $Genre
+                    }
+                }
+            } catch {
+                Write-Host -ForegroundColor DarkYellow "Error setting MP3 tags for file [$($File.FullName)]"
+                continue
+            }
+            Write-Output '----------'
+        }
+        # Inform user of script completion
+        Write-Host -ForegroundColor Green "Complete. Processed $($Files.Count) files."
     }
 } #endfunction Set-MP3MetadataTags
 #endregion Functions
@@ -226,8 +209,8 @@ try {
     } elseif (($UserProcessGenre -match '^[nN]') -and ($UserGenre -match '^[nN]')) {
         Set-MP3MetadataTags -Directory $Directory
     } elseif (($UserProcessGenre -match '^[nN]') -and ($UserGenre -match '^[yY]')) {
-        $genrePref = Read-Host 'What genre would you like to set for the songs (must be the same for all files in directory)?'
-        Set-MP3MetadataTags -Directory $Directory -ProcessGenre -Genre $genrePref
+        $GenrePref = Read-Host 'What genre would you like to set for the songs (must be the same for all files in directory)?'
+        Set-MP3MetadataTags -Directory $Directory -ProcessGenre -Genre $GenrePref
     } else {
         Write-Host -ForegroundColor Yellow 'Invalid entry. Using default: Genre tag will NOT be added.'
         Set-MP3MetadataTags -Directory $Directory
