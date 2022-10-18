@@ -31,8 +31,9 @@ function Get-Artist {
     process {
         foreach ($File in $File) {
             if (Test-Path $File) {
+                $FilePath = Resolve-Path -Path $File
                 try {
-                    $FileTags = [TagLib.File]::Create($File)
+                    $FileTags = [TagLib.File]::Create($FilePath)
                 } catch {
                     if ($_.Exception.Message -eq 'Unable to find type [TagLib.File].') {
                         Write-Error 'TagLibSharp library is not imported. Please ensure this function can access [TagLibSharp.dll]'
@@ -43,7 +44,7 @@ function Get-Artist {
                     }
                 }
                 if ($FileTags.Tag.RemixedBy) {
-                    Write-Output "Getting Artist and RemixedBy tags for file [$File]"
+                    Write-Verbose "Getting Artist and RemixedBy tags for file [$File]"
                     [PSCustomObject]@{
                         File         = [string]$File
                         AlbumArtists = [string]$FileTags.Tag.AlbumArtists
@@ -52,7 +53,7 @@ function Get-Artist {
                         RemixedBy    = [string]$FileTags.Tag.RemixedBy
                     }
                 } else {
-                    Write-Output "Getting Artist tags for file [$File]"
+                    Write-Verbose "Getting Artist tags for file [$File]"
                     [PSCustomObject]@{
                         File         = [string]$File
                         AlbumArtists = [string]$FileTags.Tag.AlbumArtists

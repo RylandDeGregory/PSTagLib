@@ -31,8 +31,9 @@ function Get-Title {
     process {
         foreach ($File in $File) {
             if (Test-Path $File) {
+                $FilePath = Resolve-Path -Path $File
                 try {
-                    $FileTags = [TagLib.File]::Create($File)
+                    $FileTags = [TagLib.File]::Create($FilePath)
                 } catch {
                     if ($_.Exception.Message -eq 'Unable to find type [TagLib.File].') {
                         Write-Error 'TagLibSharp library is not imported. Please ensure this function can access [TagLibSharp.dll]'
