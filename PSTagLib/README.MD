@@ -42,3 +42,42 @@ Get-Help $Command -Full
 
 # Example: Get-Help Set-TagLibProperty -Full
 ```
+
+## Supported ID3 file metadata tags and properties
+
+### Tags
+
+- Album
+- AlbumArtists
+- Artists
+- BeatsPerMinute
+- Comment
+- Composers
+- Conductor
+- Copyright
+- DateTagged
+- Description
+- Disc
+- DiscCount
+- Genres
+- IsCompilation
+- Length
+- Lyrics
+- Performers
+- Pictures
+- Publisher
+- RemixedBy
+- Subtitle
+- Title
+- Track
+- Version
+- Year
+
+### Properties
+
+- AudioBitrate
+- AudioChannels
+- AudioSampleRate
+- BitsPerSample
+- Codecs
+- Duration
