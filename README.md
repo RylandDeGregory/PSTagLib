@@ -36,7 +36,7 @@ Open PowerShell as **Administrator** and copy the following code into the window
 Invoke-RestMethod 'https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe' -OutFile "$env:USERPROFILE\Desktop\vcredist_x86.exe"
 Start-Process "$env:USERPROFILE\Desktop\vcredist_x86.exe" -ArgumentList '/Q' -Wait
 Remove-Item "$env:USERPROFILE\Desktop\vcredist_x86.exe" -Force -ErrorAction SilentlyContinue
-Invoke-WebRequest 'https://yt-dl.org/downloads/2021.12.17/youtube-dl.exe' -OutFile "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\youtube-dl.exe"
+Invoke-WebRequest 'https://yt-dl.org/downloads/latest/youtube-dl.exe' -OutFile "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\youtube-dl.exe"
 $env:Path = [System.Environment]::GetEnvironmentVariable('PATH')
 ```
 
