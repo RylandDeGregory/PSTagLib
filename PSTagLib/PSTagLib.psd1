@@ -72,13 +72,11 @@ RequiredAssemblies = @('.\lib\TagLibSharp.dll')
 FunctionsToExport = @('Get-Album',
                       'Get-Artist',
                       'Get-Genre',
-                      'Get-Metadata',
                       'Get-Publisher',
                       'Get-Title',
                       'Set-Album',
                       'Set-Artist',
                       'Set-Genre',
-                      'Set-Metadata',
                       'Set-Publisher',
                       'Set-Title')
 
