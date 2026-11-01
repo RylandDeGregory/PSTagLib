@@ -4,28 +4,23 @@
 
 This directory contains a PowerShell module for interacting with Media File Metadata (ID3) Tags.
 
-This module can be used independently of any scripts in the root repository, and is meant to be installed as a standard PowerShell module using PowerShellGet. 
+This module can be used independently of any scripts in the root repository, and is installed as a standard PowerShell module using PSResourceGet.
 
 The modules uses standard PowerShell cmdlet syntax and native PowerShell objects, and supports standard interaction methods (pipeline, named, and positional parameters).
 
 ## Installation
 
-1. Register the PSTagLib PowerShell Repository on [Azure Artifacts](https://dev.azure.com/rylanddegregory/PSTagLib/_artifacts/feed/PSTagLib).
+Register the PSTagLib package repository and provide a classic GitHub personal access token with the `read:packages` scope. GitHub Packages requires credentials for all operations, including installing public packages.
 
 ```PowerShell
-Register-PSRepository -Name PSTagLibRepo -SourceLocation 'https://pkgs.dev.azure.com/rylanddegregory/pstaglib/_packaging/pstaglib/nuget/v2' -InstallationPolicy Trusted
+$repositoryName = 'PSTagLib'
+Register-PSResourceRepository -Name $repositoryName -Uri 'https://nuget.pkg.github.com/RylandDeGregory/index.json'
+$credential = Get-Credential -UserName 'YOUR_GITHUB_USERNAME' -Message 'Enter a classic GitHub PAT with read:packages access'
+Install-PSResource -Name 'PSTagLib' -Repository $repositoryName -Credential $credential
+Import-Module -Name 'PSTagLib' -Force
 ```
 
-2. Install the PSTagLib module using PowerShellGet.
-
-```PowerShell
-Install-Module PSTagLib -Scope CurrentUser
-```
-3. Update the module when a new version is available in the repository.
-
-```PowerShell
-Update-Module PSTagLib
-```
+If `Register-PSResourceRepository` is unavailable, install and import PSResourceGet with `Install-Module Microsoft.PowerShell.PSResourceGet -Scope CurrentUser`.
 
 ## Usage
 
